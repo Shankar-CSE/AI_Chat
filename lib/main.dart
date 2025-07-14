@@ -6,7 +6,7 @@ import 'screens/chat_screen.dart';
 void main() {
   runApp(
     Provider(
-      create: (context) => ChatService('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'),
+      create: (context) => ChatService('api-key'),
       child: const MyApp(),
     ),
   );
