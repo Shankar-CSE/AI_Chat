@@ -1,5 +1,5 @@
 name: ai_chat
-description: "A new Flutter project."
+description: "An Ai chat application which is build with open-router api key and DeepSeek ai models"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -37,6 +37,7 @@ dependencies:
   http: ^1.4.0
   provider: ^6.1.5
   flutter_markdown: ^0.6.15
+  connectivity_plus: ^5.0.2 
 
 dev_dependencies:
   flutter_test:

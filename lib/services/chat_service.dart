@@ -1,9 +1,10 @@
 import "dart:convert";
 import "package:http/http.dart" as http;
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
 class ChatService {
   static const String _apiUrl = "https://api.openai.com/v1/chat/completions";
+  static const _deepSeekModel = 'deepseek/deepseek-chat:free';
   final String _apiKey;
   ChatService(this._apiKey);
 
@@ -18,9 +19,9 @@ class ChatService {
           'X-Title': 'AI-Chat',
           },
           body: jsonEncode({
-          'model': 'deepseek/deepseek-chat:free', // DeepSeek model
+          'model': _deepSeekModel,
           'messages': [
-            ...history.map((msg) => {'role': msg['role'], 'content': msg['content']}),
+            ...?history?.map((msg) => {'role': msg['role'], 'content': msg['content']}),
             {'role': 'user', 'content': message},
           ],
         }),
