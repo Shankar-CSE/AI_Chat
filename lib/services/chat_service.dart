@@ -3,7 +3,7 @@ import "package:http/http.dart" as http;
 // import 'package:flutter/material.dart';
 
 class ChatService {
-  static const String _apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+  static const String _apiUrl = "https://api.openai.com/v1/chat/completions";
   static const _deepSeekModel = 'deepseek/deepseek-chat:free';
   final String _apiKey;
   ChatService(this._apiKey);
