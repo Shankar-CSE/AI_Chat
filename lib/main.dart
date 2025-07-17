@@ -17,7 +17,7 @@ void main() {
   
   runApp(
     Provider(
-      create: (context) => ChatService('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'),
+      create: (context) => ChatService(const String.fromEnvironment('API_KEY', defaultValue: '<YOUR_API_KEY>')),
       child: const MyApp(),
     ),
   );

@@ -451,12 +451,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             controller: _messageController,
                             style: GoogleFonts.poppins(
                               fontSize: 16,
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                             decoration: InputDecoration(
                               hintText: 'Type your message...',
                               hintStyle: GoogleFonts.poppins(
-                                color: Colors.white.withOpacity(0.7),
+                                color: Colors.grey.withOpacity(0.7),
                                 fontSize: 16,
                               ),
                               border: InputBorder.none,
