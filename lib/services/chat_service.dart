@@ -12,7 +12,7 @@ class ChatService {
   ///
   /// [message] is the message to send to the API.
   /// [history] is a list of previous messages in the conversation.
-  /// 
+  ///
   /// Throws an [Exception] if the API call fails or returns an error.
   Future<String> sendMessage(String message, List<Map<String, dynamic>> history) async {
     if (_apiKey.isEmpty || _apiKey == '<YOUR_API_KEY>') {
@@ -43,7 +43,7 @@ class ChatService {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        if (responseBody['choices'] != null && 
+        if (responseBody['choices'] != null &&
             responseBody['choices'].isNotEmpty &&
             responseBody['choices'][0]['message'] != null) {
           return responseBody['choices'][0]['message']['content'] ?? '';
