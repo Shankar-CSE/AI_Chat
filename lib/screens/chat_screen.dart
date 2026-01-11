@@ -151,8 +151,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -239,9 +241,25 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             color: Colors.white.withOpacity(0.2),
                             shape: BoxShape.circle,
                           ),
-                          child: IconButton(
+                          child: PopupMenuButton<String>(
                             icon: const Icon(Icons.more_vert, color: Colors.white, size: 20),
-                            onPressed: () {},
+                            onSelected: (value) {
+                              if (value == 'clear') {
+                                _showClearChatDialog();
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                value: 'clear',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.delete_outline, size: 20),
+                                    SizedBox(width: 8),
+                                    Text('Clear Chat'),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
