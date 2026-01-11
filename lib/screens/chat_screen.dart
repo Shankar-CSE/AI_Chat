@@ -22,7 +22,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   late AnimationController _fabController;
   late AnimationController _typingController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -41,6 +41,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     _fabController.dispose();
     _typingController.dispose();
     _messageController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -53,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       _isLoading = true;
     });
     _scrollToBottom();
-    
+
     try {
       final chatService = Provider.of<ChatService>(context, listen: false);
       final response = await chatService.sendMessage(message, _messages);
@@ -77,6 +78,31 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         _isLoading = false;
       });
     }
+  }
+
+  void _showClearChatDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Clear Chat'),
+        content: const Text('Are you sure you want to clear all messages?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _messages.clear();
+              });
+              Navigator.of(context).pop();
+            },
+            child: const Text('Clear', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
   }
 
   void _scrollToBottom() {
@@ -150,8 +176,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -238,9 +266,25 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             color: Colors.white.withOpacity(0.2),
                             shape: BoxShape.circle,
                           ),
-                          child: IconButton(
+                          child: PopupMenuButton<String>(
                             icon: const Icon(Icons.more_vert, color: Colors.white, size: 20),
-                            onPressed: () {},
+                            onSelected: (value) {
+                              if (value == 'clear') {
+                                _showClearChatDialog();
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                value: 'clear',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.delete_outline, size: 20),
+                                    SizedBox(width: 8),
+                                    Text('Clear Chat'),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -249,7 +293,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            
+
             // Chat Messages
             Expanded(
               child: Container(
@@ -316,10 +360,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                 if (index == _messages.length && _isLoading) {
                                   return _buildTypingIndicator();
                                 }
-                                
+
                                 final message = _messages[index];
                                 final isUser = message['role'] == 'user';
-                                
+
                                 return AnimatedContainer(
                                   duration: Duration(milliseconds: 300 + (index * 100)),
                                   curve: Curves.easeOutBack,
@@ -347,7 +391,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                           ),
                                           child: const Icon(Icons.auto_awesome, color: Colors.white, size: 20),
                                         ),
-                                      
+
                                       Flexible(
                                         child: Container(
                                           margin: const EdgeInsets.symmetric(horizontal: 12),
@@ -387,7 +431,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                               ),
                                               code: GoogleFonts.firaCode(
                                                 color: isUser ? Colors.white : const Color(0xFF2D3748),
-                                                backgroundColor: isUser 
+                                                backgroundColor: isUser
                                                     ? Colors.white.withOpacity(0.2)
                                                     : const Color(0xFFF7FAFC),
                                                 fontSize: 14,
@@ -396,7 +440,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                           ),
                                         ),
                                       ),
-                                      
+
                                       if (isUser)
                                         Container(
                                           width: 40,
@@ -426,7 +470,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            
+
             // Input Area
             Container(
               margin: const EdgeInsets.all(20),
@@ -496,6 +540,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           ],
         ),
       ),
+    ),
     );
   }
 }
