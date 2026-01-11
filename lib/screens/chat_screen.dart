@@ -41,6 +41,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     _fabController.dispose();
     _typingController.dispose();
     _messageController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
